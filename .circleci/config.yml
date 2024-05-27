@@ -24,8 +24,7 @@ jobs:
       # Running analysis. 
       # The compile_commands.json file obtained when building the project is used
       - run: pvs-studio-analyzer analyze -j2 -l PVS.lic -o PVS-Studio.log 
-                                         -f ./build/compile_commands.json 
-                                         --disableLicenseExpirationCheck
+                                         -f ./build/compile_commands.json
       # Converting the analyzer report to HTML format
       - run: plog-converter -t html -o PVS-Studio.html PVS-Studio.log
       # Creating a directory with analysis artifacts and copying analyzer reports
