@@ -17,7 +17,7 @@ jobs:
                    https://cdn.pvs-studio.com/etc/viva64.list
       - run: sudo apt-get -y update && sudo apt-get -y install pvs-studio
       # PVS-Studio license activation
-      - run: pvs-studio-analyzer credentials -o PVS.lic ${PVS_ PVS_USERNAME}
+      - run: pvs-studio-analyzer credentials -o PVS.lic ${PVS_USERNAME}
                                                         ${PVS_KEY}
       # Building the project
       - run: mkdir build && cd build && cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=On
