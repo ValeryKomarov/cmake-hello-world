@@ -1,0 +1,22 @@
+# Couldn't automatically generate a config from your source code.
+# This is a generic template to serve as a base for your custom config
+# See: https://circleci.com/docs/configuration-reference
+version: 2.1
+jobs:
+  build:
+    machine:
+      image: ubuntu-2204:current
+    steps:
+      - checkout
+      - run: sudo apt-get install -y cmake
+      - run: sudo apt-get update && sudo apt-get install -y build-essential
+      - run: mkdir build && cd build && cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=On
+      - run: sudo wget -qO- https://cdn.pvs-studio.com/etc/pubkey.txt | sudo gpg --dearmor -oy /etc/apt/trusted.gpg.d/viva64.gpg
+      - run: sudo wget -O /etc/apt/sources.list.d/viva64.list https://cdn.pvs-studio.com/etc/viva64.list
+      - run: sudo apt-get -y update && sudo apt-get -y install pvs-studio
+      - run: pvs-studio-analyzer credentials -o PVS.lic ${PVS_USERNAME} ${PVS_KEY}
+      - run: pvs-studio-analyzer analyze -j2 -l PVS.lic -o PVS-Studio.log --disableLicenseExpirationCheck -f compile_commands.json
+      - run: plog-converter -t html -o PVS-Studio.html PVS-Studio.log
+      - run: mkdir PVS_Result && cp PVS-Studio.* ./PVS_Result/
+      - store_artifacts:
+          path: ./PVS_Result 
