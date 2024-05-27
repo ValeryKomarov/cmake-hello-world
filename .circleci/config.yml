@@ -11,7 +11,7 @@ jobs:
       - run: sudo apt-get install -y cmake
       - run: sudo apt-get update && sudo apt-get install -y build-essential
       - run: mkdir build && cd build && cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=On
-      - run: sudo wget -qO- https://cdn.pvs-studio.com/etc/pubkey.txt | sudo gpg --dearmor -oy /etc/apt/trusted.gpg.d/viva64.gpg
+      - run: wget -q -O - https://cdn.pvs-studio.com/etc/pubkey.txt | sudo apt-key add -
       - run: sudo wget -O /etc/apt/sources.list.d/viva64.list https://cdn.pvs-studio.com/etc/viva64.list
       - run: sudo apt-get -y update && sudo apt-get -y install pvs-studio
       - run: pvs-studio-analyzer credentials -o PVS.lic ${PVS_USERNAME} ${PVS_KEY}
