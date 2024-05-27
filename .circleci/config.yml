@@ -15,7 +15,7 @@ jobs:
       - run: sudo wget -O /etc/apt/sources.list.d/viva64.list https://cdn.pvs-studio.com/etc/viva64.list
       - run: sudo apt-get -y update && sudo apt-get -y install pvs-studio
       - run: pvs-studio-analyzer credentials -o PVS.lic ${PVS_USERNAME} ${PVS_KEY}
-      - run: pvs-studio-analyzer analyze -j2 -l PVS.lic -o PVS-Studio.log --disableLicenseExpirationCheck -f compile_commands.json
+      - run: pvs-studio-analyzer analyze -j2 -l PVS.lic -o PVS-Studio.log --disableLicenseExpirationCheck -f ./build/compile_commands.json
       - run: plog-converter -t html -o PVS-Studio.html PVS-Studio.log
       - run: mkdir PVS_Result && cp PVS-Studio.* ./PVS_Result/
       - store_artifacts:
