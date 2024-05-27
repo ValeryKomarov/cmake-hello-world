@@ -7,16 +7,26 @@ jobs:
     machine:
       image: ubuntu-2204:current
     steps:
+      # Downloading sources from the Github repository
       - checkout
+      # Setting up the environment
       - run: sudo apt-get install -y cmake
-      - run: sudo apt-get update && sudo apt-get install -y build-essential
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y build-essential 
+      # Building the project
       - run: mkdir build && cd build && cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=On
+      # Installation of PVS-Studio
       - run: wget -q -O - https://cdn.pvs-studio.com/etc/pubkey.txt | sudo apt-key add -
       - run: sudo wget -O /etc/apt/sources.list.d/viva64.list https://cdn.pvs-studio.com/etc/viva64.list
       - run: sudo apt-get -y update && sudo apt-get -y install pvs-studio
+      # PVS-Studio license activation
       - run: pvs-studio-analyzer credentials -o PVS.lic ${PVS_USERNAME} ${PVS_KEY}
+      # Running analysis. The compile_commands.json file obtained when building the project is used
       - run: pvs-studio-analyzer analyze -j2 -l PVS.lic -o PVS-Studio.log -f ./build/compile_commands.json
+      # Converting the analyzer report to HTML format
       - run: plog-converter -t html -o PVS-Studio.html PVS-Studio.log
+      # Creating a directory with analysis artifacts and copying analyzer reports (PVS-Studio.log and PVS-Studio.html) into it
       - run: mkdir PVS_Result && cp PVS-Studio.* ./PVS_Result/
+      # Saving workflow artifacts
       - store_artifacts:
           path: ./PVS_Result 
